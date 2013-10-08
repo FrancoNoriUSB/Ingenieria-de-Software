@@ -19,7 +19,7 @@ class ConexionMOCEL():
 
 	# Abre la conexion a la base de datos MOCEL. 
 	def __init__(self):
-		self.DSN = "dbname='MOCEL' user='postgres' host='localhost' password='postgres'"
+		self.DSN = "dbname='mocel' user='postgres' host='localhost' password='postgres'"
 		self.con = psycopg2.connect(self.DSN)
 		self.cur = self.con.cursor()
 

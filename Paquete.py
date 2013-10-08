@@ -26,7 +26,7 @@ class Paquete:
 		self._nombre = nombre
 		self._descripcion = descripcion 
 		self._monto = monto
-		self._listaServiciosConInclusiones = None
+		self._listaServiciosConInclusiones = []
 		
 	# Los siguientes metodos obtienen y modifican los datos del paquete.
 	def getCodPaquete(self):
@@ -57,27 +57,25 @@ class Paquete:
 		return self._listaServiciosConInclusiones
 
 	def setListaServiciosConInclusiones(self):
-	       if(self._listaServiciosConInclusiones is None):	
-	       		conex = conexiondb.ConexionMOCEL()
-			query = "SELECT S.* , I.CANT_SERVICIO FROM SERVICIO S, INCLUYE I WHERE I.CODIGO_PAQUETE = '"+ self.getCodPaquete()+"' AND I.CODIGO_SERVICIO=S.CODIGO_SERVICIO;"
-			conex.cur.execute(query)
-			self._listaServiciosConInclusiones = []
-		
-			for elem in conex.cur.fetchall():
-				servicio = (Servicio.Servicio(elem[0],elem[1],elem[2],elem[3]),elem[4])
-				
-				self._listaServiciosConInclusiones.append(servicio)
-			conex.cerrarConexion()
-	       else:
+       		conex = conexiondb.ConexionMOCEL()
+		query = "SELECT S.* , I.CANT_SERVICIO FROM SERVICIO S, INCLUYE I WHERE I.CODIGO_PAQUETE = '"+ self.getCodPaquete()+"' AND I.CODIGO_SERVICIO = S.CODIGO_SERVICIO;"
+		conex.cur.execute(query)
+		self._listaServiciosConInclusiones = []
+		for elem in conex.cur.fetchall():
+			servicio = (Servicio.Servicio(elem[0],elem[1],elem[2],elem[3]),elem[4])
+			self._listaServiciosConInclusiones.append(servicio)
+		conex.cerrarConexion()
+		if len(self._listaServiciosConInclusiones) == 0:
 			return False
-	       return True
+		else:
+			return True
 	
 	# Imprime por pantalla la informacion de un paquete.
 	def imprimir(self):
-	    print "\t" + self.getCodPaquete()
-	    print "\t" + self.getNombre()
-	    print "\t" + self.getDescripcion()
-	    print "\t" + str(self.getMonto())
+	    print self.getCodPaquete()
+	    print self.getNombre()
+	    print self.getDescripcion()
+	    print str(self.getMonto())
 		
 	    if (self.getListaServiciosConInclusiones() != None):
 		for indice in range(len(self.getListaServiciosConInclusiones())):

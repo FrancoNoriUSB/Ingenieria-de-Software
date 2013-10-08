@@ -27,7 +27,7 @@ class Cliente:
 		self._nombre = nombre
 		self._direccion = direccion
 		self._telefono = telefono
-		self._listaProductos = None
+		self._listaProductos = []
 
 	# Los siguentes metodos obtienen y modifican datos al Cliente. 
 	def getTipoID(self):
@@ -64,18 +64,19 @@ class Cliente:
 		return self._listaProductos
 
 	def setListaProductos(self):
-	      if(self._listaProductos is None):
-			conex = conexiondb.ConexionMOCEL()
-			query = "SELECT * FROM PRODUCTO P WHERE P.IDENTIFICADOR = '"+self.getID()+"';"
-			conex.cur.execute(query)
-			self._listaProductos = []
-			for elem in conex.cur.fetchall():
-				producto = Producto.Producto(elem[0], elem[1], elem[2], elem[3], elem[4], elem[5], elem[6], str(elem[7]), elem[8], elem[9], str(elem[10]), elem[11], str(elem[12]))
-				self._listaProductos.append(producto)
-			conex.cerrarConexion()
-	      else:
-		 	return False
-	      return True
+		conex = conexiondb.ConexionMOCEL()
+		query = "SELECT * FROM PRODUCTO P WHERE P.IDENTIFICADOR = '"+self.getID()+"';"
+		conex.cur.execute(query)
+		self._listaProductos = []
+		for elem in conex.cur.fetchall():
+			producto = Producto.Producto(elem[0], elem[1], elem[2], elem[3], elem[4], elem[5], elem[6], str(elem[7]), elem[8], elem[9], str(elem[10]), elem[11], str(elem[12]))
+			self._listaProductos.append(producto)
+		conex.cerrarConexion()
+		if len(self._listaProductos) == 0:
+			return False
+		else:
+			return True
+			
 	      
 	# Imprime por pantalla la informacion de un cliente. 
 	def imprimir(self):

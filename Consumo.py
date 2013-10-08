@@ -83,6 +83,20 @@ class Consumo():
 		else:
 			print "El producto no ha sido registrado en el sistema"
 
+	# Actualiza a cero el consumo.
+	def actualizarACero(self):
+		conex = conexiondb.ConexionMOCEL()
+		# Buzon de voz
+		if self.getCodServicio() == '20005':
+			query = "UPDATE CONSUME C SET CANT_CONSUMIDA = "+ str(1) +" WHERE (C.CODIGO_PRODUCTO = '"+self.getCodProducto()+"' AND C.CODIGO_SERVICIO = '"+self.getCodServicio()+"');" 
+		# cualquier otro servicio
+		else:
+			query = "UPDATE CONSUME C SET CANT_CONSUMIDA = "+ str(0) +" WHERE (C.CODIGO_PRODUCTO = '"+self.getCodProducto()+"' AND C.CODIGO_SERVICIO = '"+self.getCodServicio()+"');" 
+		conex.cur.execute(query)
+		conex.con.commit()
+		conex.cerrarConexion()
+		print "Se ha actualizado correctamente el consumo del servicio"
+
 	# Verifica que el producto a traves del paquete tiene acceso al servicio. 
 	def ProductoAPaqueteAServicio(self):
 		conex = conexiondb.ConexionMOCEL()
@@ -121,11 +135,11 @@ class Consumo():
 
 # Principal    
 if __name__== "__main__":
-	cons = Consumo('5002', '20004', 3)
+	cons = Consumo('5004', '20004', 0)
 	cons2 = Consumo('5002', '20003', 56)
 	cons3 = Consumo('5000', '20004', 4)
 	print "********************************************************************"
-	cons.registrarConsumo()
+	cons.actualizarACero()
 	print "********************************************************************"
 	cons.consultarConsumo()
 	print "********************************************************************"

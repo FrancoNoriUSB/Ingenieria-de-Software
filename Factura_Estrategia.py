@@ -31,7 +31,7 @@ class FacturaEstrategia(object):
 			return self.action.generarFactura()
 		else: 
 			raise UnboundLocalError('Excepcion: No se ha suministrado una clase estrategia a FacturaEstrategia')
-
+	
 	
 class FacturaPostpago(object):
 
@@ -269,13 +269,11 @@ class FacturaPrepago(object):
 					pagado = 0
 					for index in range(len(consumosProd)):
 						c = Consumo.Consumo(consumosProd[index].getCodProducto(), consumosProd[index].getCodServicio(), 0)
-						c.registrarConsumo()
-					p = Producto.Producto(productos[ind].getCodProducto, productos[ind].getID(), productos[ind].getCodPlan(), productos[ind].getNombre(), productos[ind].getDescripcion(), productos[ind].getTipoTarjeta(), productos[ind].getNumeroTarjeta(), productos[ind].getFechaVencTarjeta(), productos[ind].getBancoTarjeta(), productos[ind].getDiaFacturacion(), productos[ind].getFechaAfil(), productos[ind].getTipoPlan() , productos[ind].getMontoDisp())
+						c.actualizarACero()
+					p = Producto.Producto(productos[ind].getCodProducto(), productos[ind].getID(), productos[ind].getCodPlan(), productos[ind].getNombre(), productos[ind].getDescripcion(), productos[ind].getTipoTarjeta(), productos[ind].getNumeroTarjeta(), productos[ind].getFechaVencTarjeta(), productos[ind].getBancoTarjeta(), productos[ind].getDiaFacturacion(), productos[ind].getFechaAfil(), productos[ind].getTipoPlan() , productos[ind].getMontoDisp())
 					a = float(productos[ind].getMontoDisp())-float(monto)
 					p.setMontoDisp(str(a))
-					print "   AQUI SE ACTUALIZAN LOS CONSUMOS DE LOS SERVICIOS A 0 (1 EN EL CASO DE BUZON DE VOZ)"
-					print "   SE LE DESCUENTA EL SALDO SIPONIBLE EN LO QUE INDICA EL MONTO A PAGAR Y"
-					print "   Factura cancelada satisfactoriamente. Su nuevo saldo es: " + str(productos[ind].getMontoDisp())
+					print "   Factura cancelada satisfactoriamente. Su nuevo saldo es: " + str(a)
 					
 				else:
 					pagado = 1
@@ -289,7 +287,7 @@ class FacturaPrepago(object):
 			print "+++ Este Cliente no posee productos prepago +++"
 		else:
 			if pagado == 0:
-				print " El monto total cancelado por todos sus productos prepago es: " + str(montoTotalCliente) + " Bs."
+				print " El monto total cancelado por todos sus productos prepago fue: " + str(montoTotalCliente) + " Bs."
 			else:
 				print " El monto total a cancelar por todos sus productos prepago es: " + str(montoTotalCliente) + " Bs."				
 							
@@ -301,6 +299,7 @@ if __name__== "__main__":
 	Factura4 = FacturaEstrategia('E470782', strategy=FacturaPrepago)
 	Factura5 = FacturaEstrategia('E470782', strategy=FacturaPostpago)
 	Factura6 = FacturaEstrategia('11123456', strategy=FacturaPrepago)
+	Factura7 = FacturaEstrategia('12121212', strategy=FacturaPrepago)
 	print "*******************************************************************"
 	f = Factura.generarFactura()
 	print "*******************************************************************"
@@ -316,5 +315,6 @@ if __name__== "__main__":
 	print "*******************************************************************"
 	f6 = Factura6.generarFactura()
 	print "*******************************************************************"
-						
+	f7 = Factura7.generarFactura()
+	print "*******************************************************************"						
 	
